@@ -1,24 +1,18 @@
 #ifndef CONTROLLER_BASE_H
 #define CONTROLLER_BASE_H
 
+#include <Arduino.h>
 #include <PID_v10.h>
-#include <SPI.h>
-#include <max31855.h>
-#include <SparkFun_PCA9536_Arduino_Library.h>
 #include "Config.h"
 #include <PID_AutoTune_v0.h>  // https://github.com/t0mpr1c3/Arduino-PID-AutoTune-Library
+#include "Thermistor.h"
 
-#define thermoDO 12 // D7
-#define thermoCS 13 // D6
-#define thermoCLK 14 // D5
-#define RELAY 3
-#define LED_RED 0
-#define LED_GREEN 1
-#define LED_BLUE 2
-#define BUZZER_A 5
-#define BUZZER_B 4
-#define SDA 2
-#define SCL 0
+#define RELAY D8
+#define LED_RED D7
+#define LED_GREEN D6
+#define LED_BLUE D5
+#define BUZZER_A D1
+#define BUZZER_B D2
 
 #define DEFAULT_TARGET 60
 #define MAX_ON_TIME 1000 * 60 * 2
@@ -138,8 +132,6 @@ public:
 	unsigned long elapsed(unsigned long now);
 
 private:
-	PCA9536 pca9536;
-	MAX31855 thermocouple;
 	bool _locked;
 	bool _heater;
 	bool _last_heater;

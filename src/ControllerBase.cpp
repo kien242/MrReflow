@@ -1,10 +1,10 @@
 #include "ControllerBase.h"
+#include "Thermistor.h"
 
 ControllerBase::ControllerBase(Config& cfg) :
 	config(cfg),
 	pidTemperature(&_temperature, &_target_control, &_target, .5/DEFAULT_TEMP_RISE_AFTER_OFF, 5.0/DEFAULT_TEMP_RISE_AFTER_OFF, 4/DEFAULT_TEMP_RISE_AFTER_OFF, DIRECT),
-	aTune(&_temperature, &_target_control, &_target, &_now, DIRECT),
-	thermocouple(thermoCLK, thermoCS, thermoDO)
+	aTune(&_temperature, &_target_control, &_target, &_now, DIRECT)
 {
 	_readings.reserve(15 * 60);
 
@@ -15,27 +15,24 @@ ControllerBase::ControllerBase(Config& cfg) :
 	pidTemperature.SetSampleTime(config.measureInterval * 1000);
   pidTemperature.SetMode(AUTOMATIC);
 	pidTemperature.SetOutputLimits(0, 1);
-	thermocouple.begin();
-	Wire.begin(SDA, SCL);
-	pca9536.begin(Wire);
-	pca9536.pinMode(RELAY, OUTPUT);
-	pca9536.pinMode(LED_RED, OUTPUT);
-	pca9536.pinMode(LED_GREEN, OUTPUT);
-	pca9536.pinMode(LED_BLUE, OUTPUT);
+	pinMode(RELAY, OUTPUT);
+	pinMode(LED_RED, OUTPUT);
+	pinMode(LED_GREEN, OUTPUT);
+	pinMode(LED_BLUE, OUTPUT);
 
-	pca9536.write(RELAY, LOW);
-	pca9536.write(LED_RED, LOW);
-	pca9536.write(LED_GREEN, LOW);
-	pca9536.write(LED_BLUE, LOW);
-	pca9536.write(LED_RED, HIGH);
+	digitalWrite(RELAY, LOW);
+	digitalWrite(LED_RED, LOW);
+	digitalWrite(LED_GREEN, LOW);
+	digitalWrite(LED_BLUE, LOW);
+	digitalWrite(LED_RED, HIGH);
 	delay(100);
-	pca9536.write(LED_GREEN, HIGH);
+	digitalWrite(LED_GREEN, HIGH);
 	delay(100);
-	pca9536.write(LED_BLUE, HIGH);
+	digitalWrite(LED_BLUE, HIGH);
 	delay(100);
-	pca9536.write(LED_RED, LOW);
-	pca9536.write(LED_GREEN, LOW);
-	pca9536.write(LED_BLUE, LOW);
+	digitalWrite(LED_RED, LOW);
+	digitalWrite(LED_GREEN, LOW);
+	digitalWrite(LED_BLUE, LOW);
 
 	_mode = _last_mode = INIT;
 	_temperature = 0;
@@ -56,8 +53,7 @@ ControllerBase::ControllerBase(Config& cfg) :
 
 	setPID("default");
 
-	thermocouple.read();
-	_temperature = thermocouple.getTemperature();
+	_temperature = readTemperature();
 
 	S_printf("Current temperature: %f\n", _temperature);
 	_readings.push_back(temperature_to_log(_temperature));
@@ -110,8 +106,8 @@ void ControllerBase::loop(unsigned long now)
 
 	handle_safety(now);
 
-	pca9536.write(RELAY, _heater);
-	pca9536.write(LED_RED, _heater);
+	digitalWrite(RELAY, _heater);
+	digitalWrite(LED_RED, _heater);
 
 	if (_onHeater && _heater != _last_heater)
 		_onHeater(_heater);
@@ -172,8 +168,7 @@ float ControllerBase::log_to_temperature(ControllerBase::Temperature_t t) {
 float ControllerBase::measure_temperature(unsigned long now) {
 	if (now - last_m > config.measureInterval * 1.1) {
 		last_m = now;
-		thermocouple.read();
-		return temperature(thermocouple.getTemperature());
+		return readTemperature();
 	} else
 		return temperature();
 }
@@ -202,8 +197,7 @@ void ControllerBase::handle_mode(unsigned long now) {
 	if (_last_mode <= OFF && _mode > OFF)
 	{
 		_start_time = now;
-		thermocouple.read();
-		_temperature = thermocouple.getTemperature();
+		_temperature = readTemperature();
 		pidTemperature.Reset();
 		_readings.clear();
 		_readings.push_back(temperature_to_log(_temperature));
@@ -231,8 +225,7 @@ void ControllerBase::handle_mode(unsigned long now) {
 
 	} else if (_mode <= OFF && _last_mode > OFF)
 	{
-		thermocouple.read();
-		_temperature = thermocouple.getTemperature();
+		_temperature = readTemperature();
 		_readings.push_back(temperature_to_log(_temperature));
 		if (_last_mode == REFLOW || _last_mode == REFLOW_COOL)
 			setPID("default");
@@ -246,8 +239,7 @@ void ControllerBase::handle_mode(unsigned long now) {
 
 void ControllerBase::handle_measure(unsigned long now) {
 	double last_temperature = _temperature;
-	thermocouple.read();
-	_temperature = thermocouple.getTemperature();
+	_temperature = readTemperature();
 	double rate = 1000.0 * (_temperature - last_temperature) / (double)config.measureInterval;
 	_avg_rate = _avg_rate * .9 + rate * .1;
 

@@ -13,7 +13,7 @@ var chart_config = {
 			backgroundColor: 'transparent',
 			borderColor: chartColors.current,
 			borderWidth: 1,
-			pointRadius: 2,
+			pointRadius: 0,
 			pointHoverRadius: 5,
 			pointBackgroundColor: chartColors.current
 		},
@@ -23,7 +23,7 @@ var chart_config = {
 			backgroundColor: 'transparent',
 			borderColor: chartColors.target,
 			borderWidth: 1,
-			pointRadius: 2,
+			pointRadius: 0,
 			pointHoverRadius: 5,
 			pointBackgroundColor: chartColors.target
 		}]

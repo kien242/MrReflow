@@ -18,8 +18,7 @@ function load_wifi_setup(){
 			 retry_count: 3,
 			 url: get_url("config"),
 			 success: function(data) {
-			 debugger;
-				 config = data;
+			 	 config = data;
 
 				 $("#networks-list").html("");
 

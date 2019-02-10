@@ -46,12 +46,6 @@ ControllerBase::ControllerBase(Config& cfg) :
 
 	_heater = _last_heater = false;
 
-	pinMode(BUZZER_A, OUTPUT);
-
-	tone(BUZZER_A, 440, 100);
-	delay(100);
-	tone(BUZZER_A, 640, 2000);
-
 	setPID("default");
 
 	_temperature = readTemperature();

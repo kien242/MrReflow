@@ -4,6 +4,7 @@
 #include <ArduinoJson.h>
 #include "AsyncJson.h"
 #include "Config.h"
+#include "WLan.h"
 
 AsyncWebServer server(80);
 AsyncWebSocket ws("/ws");
@@ -153,6 +154,32 @@ void setup() {
 	SPIFFS.begin();
 	config.load_config();
 	config.load_profiles();
+
+	//wlan config now melody
+	pinMode(BUZZER_A, OUTPUT);
+	tone(BUZZER_A, 1240, 100);
+	delay(200);
+	tone(BUZZER_A, 740, 100);
+	delay(200);
+	tone(BUZZER_A, 240, 100);
+	delay(200);
+	WiFi.hostname("MrReflow");
+	WiFi.begin(SSID, SSID_PW);
+
+
+	while (WiFi.status() != WL_CONNECTED)
+	{
+		//wait wlan sound
+		tone(BUZZER_A, 440, 50);
+		delay(100);
+	}
+	//wlan success melody
+ 	tone(BUZZER_A, 240, 500);
+ 	delay(500);
+ 	tone(BUZZER_A, 740, 500);
+ 	delay(500);
+ 	tone(BUZZER_A, 1240, 500);
+ 	delay(500);
 
 	server.addHandler(&ws);
 	server.addHandler(&events);

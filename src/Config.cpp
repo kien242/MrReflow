@@ -39,19 +39,9 @@ bool Config::load_config() {
 	return load_json(cfgName, 1024, [](JsonObject& json, Config* self){
 		char str[255] = "";
 		self->networks.empty();
-		self->hostname = json["hostname"].as<char*>();
-		self->user = json["user"].as<char*>();
-		self->password = json["password"].as<char*>();
-		self->otaPassword = json["otaPassword"].as<char*>();
 		self->measureInterval = json["measureInterval"];
 		self->reportInterval = json["reportInterval"];
 
-		sprintf(str, "Config hostname: %s", self->hostname.c_str());
-		Serial.println(str);
-		sprintf(str, "Config OTA password: %s", self->otaPassword.c_str());
-		Serial.println(str);
-		sprintf(str, "Config user: %s @ %s", self->user.c_str(), self->password.c_str());
-		Serial.println(str);
 		sprintf(str, "Config measure/report intervals: %f @ %f", self->measureInterval, self->reportInterval);
 		Serial.println(str);
 
@@ -140,27 +130,6 @@ bool Config::load_json(const String& name, size_t max_size, THandlerFunction_par
 
 	Serial.println("Loading config " + name + " DONE; Heap: " + String(ESP.getFreeHeap()));
 	return parsed;
-}
-
-bool Config::setup_OTA() {
-	Serial.println("OTA setup");
-
-	OTA = new EasyOTA(hostname);
-
-	std::map<String, String>::iterator I = networks.begin();
-	while (I != networks.end()) {
-		OTA->addAP(I->first, I->second);
-		Serial.println("Add network: " + I->first);
-		I++;
-	}
-
-	OTA->onConnect([](const String& ssid, EasyOTA::STATE state) {
-		S_printf("Connected %s, state: %s", ssid.c_str(), state == EasyOTA::EOS_STA ? "Station" : "Access Point");
-	});
-
-	OTA->onMessage([](const String& msg, int line) {
-		S_printf("OTA message: %s", msg.c_str());
-	});
 }
 
 bool Config::save_config(AsyncWebServerRequest *request, uint8_t * data, size_t len, size_t index, size_t total) {

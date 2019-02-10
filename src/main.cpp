@@ -1,4 +1,3 @@
-#include <EasyOTA.h>
 #include <ESPAsyncWebServer.h>
 #include <SPIFFSEditor.h>
 #include "ReflowController_v1.h"
@@ -154,7 +153,6 @@ void setup() {
 	SPIFFS.begin();
 	config.load_config();
 	config.load_profiles();
-	config.setup_OTA();
 
 	server.addHandler(&ws);
 	server.addHandler(&events);
@@ -246,8 +244,6 @@ void setup() {
 
 void loop() {
 	unsigned long now = millis();
-
-  config.OTA->loop(now);
 
 	// since this is single core, we don't care about
 	// synchronization

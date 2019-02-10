@@ -9,10 +9,9 @@
 
 #define RELAY D8
 #define LED_RED D7
-#define LED_GREEN D6
-#define LED_BLUE D5
+#define LED_GREEN D5
+#define LED_BLUE D6
 #define BUZZER_A D1
-#define BUZZER_B D2
 
 #define DEFAULT_TARGET 60
 #define MAX_ON_TIME 1000 * 60 * 2

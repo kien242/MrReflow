@@ -47,9 +47,10 @@ ControllerBase::ControllerBase(Config& cfg) :
 	_heater = _last_heater = false;
 
 	pinMode(BUZZER_A, OUTPUT);
-	pinMode(BUZZER_B, OUTPUT);
 
 	tone(BUZZER_A, 440, 100);
+	delay(100);
+	tone(BUZZER_A, 640, 2000);
 
 	setPID("default");
 
@@ -62,6 +63,13 @@ ControllerBase::ControllerBase(Config& cfg) :
 
 void ControllerBase::loop(unsigned long now)
 {
+	if(_temperature < SAFE_TEMPERATURE){
+		digitalWrite(LED_GREEN, HIGH);
+		digitalWrite(LED_RED, LOW);
+	}else {
+		digitalWrite(LED_GREEN, LOW);
+		digitalWrite(LED_RED, HIGH);
+	}
 	if (_last_mode == _mode && _mode >= ON)
 	{
 		if (now - last_m > config.measureInterval) {
@@ -69,6 +77,7 @@ void ControllerBase::loop(unsigned long now)
 		}
 	}
 
+	digitalWrite(LED_BLUE, LOW);
 	switch (_mode)
 	{
 		case INIT:
@@ -80,17 +89,22 @@ void ControllerBase::loop(unsigned long now)
 			_heater = true;
 			break;
 		case ERROR_OFF:
+			digitalWrite(LED_RED, HIGH);
+			digitalWrite(LED_GREEN, HIGH);
 		case OFF:
 			//callMessage("WARNING: Heater is on until turned off");
 			_heater = false;
 			break;
 		case TARGET_PID:
+			digitalWrite(LED_BLUE, HIGH);
 			handle_pid(now);
 			break;
 		case REFLOW:
+			digitalWrite(LED_BLUE, HIGH);
 			handle_reflow(now);
 			break;
 		case CALIBRATE:
+			digitalWrite(LED_BLUE, HIGH);
 			handle_calibration(now);
 			break;
 		case CALIBRATE_COOL:
@@ -107,7 +121,6 @@ void ControllerBase::loop(unsigned long now)
 	handle_safety(now);
 
 	digitalWrite(RELAY, _heater);
-	digitalWrite(LED_RED, _heater);
 
 	if (_onHeater && _heater != _last_heater)
 		_onHeater(_heater);

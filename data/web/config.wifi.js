@@ -1,15 +1,5 @@
 var config = null;
 
-function add_wifi(ssid, psk)
-{
-	var fields = {
-		'ssid': ssid,
-		'psk': psk
-	};
-
-	clone_template("networks", fields);
-}
-
 function load_wifi_setup(){
 	if (config == null) {
 		$.ajax({
@@ -20,14 +10,8 @@ function load_wifi_setup(){
 			 success: function(data) {
 			 	 config = data;
 
-				 $("#networks-list").html("");
-
 				 $("#reportInterval").val(config.reportInterval);
 				 $("#measureInterval").val(config.measureInterval);
-
-				 $.each(data.networks, function(ssid, psk){
-					 add_wifi(ssid, psk);
-				 });
 
 				 add_message("INFO: config.json loaded!");
 			 },
@@ -40,10 +24,6 @@ function load_wifi_setup(){
 
 function config_init() {
 	var form = $("#wifi-config-form");
-
-	form.find("#add-wifi").click(function() {
-		add_wifi("", "");
-	});
 
 	form.find("#config-save").click(function() {
 		var reportInterval = $("#reportInterval").val();
@@ -71,13 +51,6 @@ function config_init() {
 
 		config.reportInterval = parseInt(reportInterval);
 		config.measureInterval = parseInt(measureInterval);
-
-		config.networks = {};
-		 $("#networks-list").find(".template-section").each(function(){
-			 var ssid = template_field(this, "ssid", checkEmpty);
-			 var psk = template_field(this, "psk");
-			 config.networks[ssid] = psk;
-		 });
 
 		 $.ajax({
 			 method: "POST",

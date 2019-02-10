@@ -39,13 +39,11 @@ public:
 public:
 	String cfgName;
 	String profilesName;
-	std::map<String, String> networks;
 
 	std::map<String, PID_t> pid;
 	std::map<String, Profile> profiles;
 
 public:
-	String hostname;
 	float measureInterval;
 	float reportInterval;
 	int tuner_id;

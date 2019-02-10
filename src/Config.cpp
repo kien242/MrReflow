@@ -38,23 +38,11 @@ Config::Config(const String& cfg, const String& profiles) :
 bool Config::load_config() {
 	return load_json(cfgName, 1024, [](JsonObject& json, Config* self){
 		char str[255] = "";
-		self->networks.empty();
 		self->measureInterval = json["measureInterval"];
 		self->reportInterval = json["reportInterval"];
 
 		sprintf(str, "Config measure/report intervals: %f @ %f", self->measureInterval, self->reportInterval);
 		Serial.println(str);
-
-		JsonObject& jo = json["networks"];
-		JsonObject::iterator I = jo.begin();
-		while (I != jo.end())
-		{
-			self->networks.insert(std::pair<String, String>(I->key, I->value.as<char*>()));
-
-			sprintf(str, "Config network: %s @ %s", I->key, I->value.as<char*>());
-			Serial.println(str);
-			++I;
-		}
 		return true;
 	});
 }

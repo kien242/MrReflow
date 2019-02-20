@@ -6,6 +6,7 @@
 #include "Config.h"
 #include <PID_AutoTune_v0.h>  // https://github.com/t0mpr1c3/Arduino-PID-AutoTune-Library
 #include "Thermistor.h"
+#include "Melody.h"
 
 #define RELAY D8
 #define LED_RED D7

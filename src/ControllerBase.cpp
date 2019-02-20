@@ -6,7 +6,7 @@ ControllerBase::ControllerBase(Config& cfg) :
 	pidTemperature(&_temperature, &_target_control, &_target, .5/DEFAULT_TEMP_RISE_AFTER_OFF, 5.0/DEFAULT_TEMP_RISE_AFTER_OFF, 4/DEFAULT_TEMP_RISE_AFTER_OFF, DIRECT),
 	aTune(&_temperature, &_target_control, &_target, &_now, DIRECT)
 {
-	_readings.reserve(15 * 60);
+	_readings.reserve(30 * 60);
 
 	_calP = .5/DEFAULT_TEMP_RISE_AFTER_OFF;
 	_calD =  5.0/DEFAULT_TEMP_RISE_AFTER_OFF;
@@ -64,7 +64,7 @@ void ControllerBase::loop(unsigned long now)
 		digitalWrite(LED_GREEN, LOW);
 		digitalWrite(LED_RED, HIGH);
 	}
-	if (_last_mode == _mode && _mode >= ON)
+	if (_last_mode == _mode)
 	{
 		if (now - last_m > config.measureInterval) {
 			handle_measure(now);
@@ -83,6 +83,7 @@ void ControllerBase::loop(unsigned long now)
 			_heater = true;
 			break;
 		case ERROR_OFF:
+			alarmSound();
 			digitalWrite(LED_RED, HIGH);
 			digitalWrite(LED_GREEN, HIGH);
 		case OFF:
@@ -103,6 +104,7 @@ void ControllerBase::loop(unsigned long now)
 			break;
 		case CALIBRATE_COOL:
 		case REFLOW_COOL:
+			notifySound();
 			_heater = false;
 			if (_temperature < SAFE_TEMPERATURE) {
 				callMessage("INFO: Temperature has reached safe levels (<%.2f*C). Max temperature: %.2f", (float)SAFE_TEMPERATURE, (float)_CALIBRATE_max_temperature);

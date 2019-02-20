@@ -12,7 +12,7 @@ var chart_config = {
 			lineTension: 0,
 			backgroundColor: 'transparent',
 			borderColor: chartColors.current,
-			borderWidth: 1,
+			borderWidth: 3,
 			pointRadius: 0,
 			pointHoverRadius: 5,
 			pointBackgroundColor: chartColors.current
@@ -22,7 +22,7 @@ var chart_config = {
 			lineTension: 0,
 			backgroundColor: 'transparent',
 			borderColor: chartColors.target,
-			borderWidth: 1,
+			borderWidth: 3,
 			pointRadius: 0,
 			pointHoverRadius: 5,
 			pointBackgroundColor: chartColors.target
@@ -341,7 +341,7 @@ function page_is_ready(){
 	});
 	$("#target_temperature").change(function(){
 		var temp = this.value;
-		if (checkFloat(temp, 0, 1200)) {
+		if (checkFloat(temp, 0, 250)) {
 			$(this).removeClass("is-invalid");
 			if (ws != null) ws.send("target:" + temp);
 		} else {

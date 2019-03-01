@@ -1,1 +1,185 @@
-{"PID":{"default":[0.101859,0.001773,0.3901274],"MrPizza":[0.022143,0.000082,0.1967621]},"profiles":{"test-no-rate":{"name":"Simple test profile","stages":["preheat","soak","reflow","cooldown"],"preheat":{"pid":"MrPizza","target":40,"rate":0,"stay":40},"soak":{"pid":"MrPizza","target":60,"rate":0,"stay":40},"reflow":{"pid":"MrPizza","target":100,"rate":0,"stay":15},"cooldown":{"pid":"MrPizza","target":50,"rate":0,"stay":40}},"leaded":{"name":"Simple low temp leaded paste profile","stages":["preheat","soak","reflow","cooldown"],"preheat":{"pid":"MrPizza","target":130,"rate":2,"stay":40},"soak":{"pid":"MrPizza","target":180,"rate":0.5,"stay":0},"reflow":{"pid":"MrPizza","target":230,"rate":2,"stay":15},"cooldown":{"pid":"MrPizza","target":50,"rate":2,"stay":0}}},"modes":{"REFLOW":"Reflow","CALIBRATE":"Calibrate","TARGET_PID":"Keep target"},"tuners":{"ZIEGLER_NICHOLS_PI":0,"ZIEGLER_NICHOLS_PID":1,"TYREUS_LUYBEN_PI":2,"TYREUS_LUYBEN_PID":3,"CIANCONE_MARLIN_PI":4,"CIANCONE_MARLIN_PID":5,"AMIGOF_PI":6,"PESSEN_INTEGRAL_PID":7,"SOME_OVERSHOOT_PID":8,"NO_OVERSHOOT_PID":9},"tuner":{"id":8,"init_output":0,"noise_band":1,"output_step":1}}
+{
+ "PID": {
+  "default": [
+   0.101859,
+   0.001773,
+   0.3901274
+  ],
+  "MrPizza": [
+   1,
+   0.000082,
+   0.1967621
+  ]
+ },
+ "profiles": {
+  "test-no-rate": {
+   "name": "Simple test profile",
+   "preheat": {
+    "pid": "MrPizza",
+    "target": 40,
+    "stay": 40,
+    "rate": 0
+   },
+   "soak": {
+    "pid": "MrPizza",
+    "target": 60,
+    "stay": 40,
+    "rate": 0
+   },
+   "reflow": {
+    "pid": "MrPizza",
+    "target": 100,
+    "stay": 15,
+    "rate": 0
+   },
+   "cooldown": {
+    "pid": "MrPizza",
+    "target": 50,
+    "stay": 40,
+    "rate": 0
+   },
+   "stages": [
+    "preheat",
+    "soak",
+    "reflow",
+    "cooldown"
+   ]
+  },
+  "leaded": {
+   "name": "Simple low temp leaded paste profile",
+   "preheat": {
+    "pid": "MrPizza",
+    "target": 130,
+    "stay": 40,
+    "rate": 2
+   },
+   "soak": {
+    "pid": "MrPizza",
+    "target": 210,
+    "stay": 0,
+    "rate": 0.5
+   },
+   "reflow": {
+    "pid": "MrPizza",
+    "target": 230,
+    "stay": 20,
+    "rate": 0
+   },
+   "cooldown": {
+    "pid": "MrPizza",
+    "target": 50,
+    "stay": 0,
+    "rate": 2
+   },
+   "stages": [
+    "preheat",
+    "soak",
+    "reflow",
+    "cooldown"
+   ]
+  },
+  "Sn42BI576Ag04": {
+   "name": "Acids Chipquik SMDLTLFP 140C No Clean",
+   "preheat": {
+    "pid": "MrPizza",
+    "target": 90,
+    "stay": 10,
+    "rate": 0.8
+   },
+   "evaporate": {
+    "pid": "MrPizza",
+    "target": 130,
+    "stay": 10,
+    "rate": 0.4
+   },
+   "soak": {
+    "pid": "MrPizza",
+    "target": 138,
+    "stay": 10,
+    "rate": 0.3
+   },
+   "reflow": {
+    "pid": "MrPizza",
+    "target": 165,
+    "stay": 5,
+    "rate": 1
+   },
+   "cooldown": {
+    "pid": "MrPizza",
+    "target": 138,
+    "stay": 10,
+    "rate": 1
+   },
+   "stages": [
+    "preheat",
+    "evaporate",
+    "soak",
+    "reflow",
+    "cooldown"
+   ]
+  },
+  "Sn63Pb37": {
+   "name": "Empires XG Z40 235C No Clean",
+   "preheat": {
+    "pid": "MrPizza",
+    "target": 100,
+    "stay": 10,
+    "rate": 2.5
+   },
+   "evaporate": {
+    "pid": "MrPizza",
+    "target": 150,
+    "stay": 10,
+    "rate": 0.6
+   },
+   "soak": {
+    "pid": "MrPizza",
+    "target": 183,
+    "stay": 5,
+    "rate": 1.1
+   },
+   "reflow": {
+    "pid": "MrPizza",
+    "target": 235,
+    "stay": 5,
+    "rate": 0.9
+   },
+   "cooldown": {
+    "pid": "MrPizza",
+    "target": 183,
+    "stay": 10,
+    "rate": 1.8
+   },
+   "stages": [
+    "preheat",
+    "evaporate",
+    "soak",
+    "reflow",
+    "cooldown"
+   ]
+  }
+ },
+ "modes": {
+  "REFLOW": "Reflow",
+  "CALIBRATE": "Calibrate",
+  "TARGET_PID": "Keep target"
+ },
+ "tuners": {
+  "ZIEGLER_NICHOLS_PI": 0,
+  "ZIEGLER_NICHOLS_PID": 1,
+  "TYREUS_LUYBEN_PI": 2,
+  "TYREUS_LUYBEN_PID": 3,
+  "CIANCONE_MARLIN_PI": 4,
+  "CIANCONE_MARLIN_PID": 5,
+  "AMIGOF_PI": 6,
+  "PESSEN_INTEGRAL_PID": 7,
+  "SOME_OVERSHOOT_PID": 8,
+  "NO_OVERSHOOT_PID": 9
+ },
+ "tuner": {
+  "id": "8",
+  "init_output": "0",
+  "noise_band": "1",
+  "output_step": "1"
+ }
+}

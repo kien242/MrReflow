@@ -1,3 +1,0 @@
-(fp_lib_table
-  (lib (name wemos_d1_mini)(type KiCad)(uri ${KIPRJMOD}/wemos_d1_mini.pretty)(options "")(descr ""))
-)

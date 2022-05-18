@@ -1,3 +1,20 @@
+/**
+ *  Copyright (C) 2018  foxis (Andrius Mikonis <andrius.mikonis@gmail.com>)
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ **/
+
 #include "Config.h"
 
 Config::Stage::Stage(const char * n, const char * p, float t, float r, float s) :
@@ -38,11 +55,33 @@ Config::Config(const String& cfg, const String& profiles) :
 bool Config::load_config() {
 	return load_json(cfgName, 1024, [](JsonObject& json, Config* self){
 		char str[255] = "";
+		self->networks.empty();
+		self->hostname = json["hostname"].as<char*>();
+		self->user = json["user"].as<char*>();
+		self->password = json["password"].as<char*>();
+		self->otaPassword = json["otaPassword"].as<char*>();
 		self->measureInterval = json["measureInterval"];
 		self->reportInterval = json["reportInterval"];
 
+		sprintf(str, "Config hostname: %s", self->hostname.c_str());
+		Serial.println(str);
+		sprintf(str, "Config OTA password: %s", self->otaPassword.c_str());
+		Serial.println(str);
+		sprintf(str, "Config user: %s @ %s", self->user.c_str(), self->password.c_str());
+		Serial.println(str);
 		sprintf(str, "Config measure/report intervals: %f @ %f", self->measureInterval, self->reportInterval);
 		Serial.println(str);
+
+		JsonObject& jo = json["networks"];
+		JsonObject::iterator I = jo.begin();
+		while (I != jo.end())
+		{
+			self->networks.insert(std::pair<String, String>(I->key, I->value.as<char*>()));
+
+			sprintf(str, "Config network: %s @ %s", I->key, I->value.as<char*>());
+			Serial.println(str);
+			++I;
+		}
 		return true;
 	});
 }

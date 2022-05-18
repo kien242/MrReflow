@@ -1,4 +1,0 @@
-(sym_lib_table
-  (lib (name wemos_mini)(type Legacy)(uri ${KIPRJMOD}/wemos_mini.lib)(options "")(descr ""))
-  (lib (name IRM-05-5)(type Legacy)(uri ${KIPRJMOD}/IRM-05-5.lib)(options "")(descr ""))
-)

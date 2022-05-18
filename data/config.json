@@ -1,4 +1,10 @@
 {
-	"measureInterval": 500,
-	"reportInterval": 1000
+	"networks": {
+	},
+	"hostname": "ESPReflow",
+	"user": "user",
+	"password": "esp",
+	"otaPassword": "",
+	"measureInterval": 1000,
+	"reportInterval": 2000
 }

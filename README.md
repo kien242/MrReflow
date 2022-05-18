@@ -7,8 +7,50 @@ Firmware for SMT reflow controller.
 > Please be careful if you wish to replicate any of it's functionality and never work on a PCB or any open wires that are connected to the mains !
 > Author has no responsibility for your safety and wellbeing, so please take care of yourself.
 
-This is a simplified version of the original one from https://github.com/foxis/ESPReflow,
-it uses the simpler jquery webfrontend, a normal 3d printer thermistor and no additional IO chip, also the pcb integrates a small powersupply to allow direct wiring into the oven
+![ESPReflow Web UI](doc/WebUI.PNG)
+
+# How it works
+The purpose of this project is to control a heater of any sort to facilitate SMT reflow soldering utilizing a predefined temperature profile. Control of the heater is performed by ESP8266 or ESP32 chip via Web UI over WiFi.
+
+To achieve that, readings from a thermocouple are used for closed loop temperature control of the target board. The controller does it's best to follow a preconfigured temperature profile for a particular SMT soldering. Of course the accuracy of the temperature profile achieved is heavily dependant on the thermal properties of the heating element, environment, the boards, etc. The controller tries to compensate for that by the means of a PID controller which has to be tuned to a particular setup.
+
+## Prototype Hardware
+
+![ESPReflow prototype](doc/espreflow-prototype.jpg)
+
+* Some generic mechanical timer enclosure is used for the plug, socket and, well, enclosure.
+* max6675 is used for interfacing with a thermocouple.
+* Generic optopair is used for controlling a 10A relay (for the prototype).
+* Weemos D1 mini is used for the brains.
+* Some cheap 1200W IR Hotplate is used for the load
+* a peace of prototype board is used for dummy board
+
+## Schematics
+
+![ESReflow schematics](schematics/schematics.png)
+![rev 1.0 board](schematics/board-v1.0.png)
+
+EasyEDA project page: https://easyeda.com/andrius.mikonis/ESPReflow-f4c523157afa47758e46728248cdb19b
+
+## Assigned pins
+
+```
+#define thermoDO 13 // D7
+#define thermoCS 12 // D6
+#define thermoCLK 14 // D5
+#define relay 4 // D2
+```
+
+## Building
+### Angular Frontend
+
+Angular front end source is in `web-src-angular` folder and should be built using nodejs. After binaries are built,
+they should be gzipped and copied into `data/web` folder before uploading.
+
+### Backend
+
+Backend is implemented using Arduino SDK and built using PlatformIO. Before building, please copy `src/sample_wificonfig.h`
+to `src/wificonfig.h` and add default Wireless Network configuration. You will be able to edit this configuration via Web interface later.
 
 ## Modes of operation
 ### Reflow

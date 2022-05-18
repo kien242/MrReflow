@@ -1,3 +1,20 @@
+/**
+ *  Copyright (C) 2018  foxis (Andrius Mikonis <andrius.mikonis@gmail.com>)
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ **/
+
 #ifndef REFLOWCONTROLLER_v1_H
 #define REFLOWCONTROLLER_v1_H
 
@@ -12,10 +29,11 @@ class ReflowController : public ControllerBase
 	Config::profiles_iterator current_profile;
 
 public:
-	ReflowController(Config& cfg) : ControllerBase(cfg)
+	ReflowController(Config& cfg, Adafruit_SSD1306& display ) : ControllerBase(cfg, display)
 	{
 		_stage_start = 0;
 		current_profile = config.profiles.end();
+		line3 = WiFi.localIP().toString();
 	}
 
 	virtual void handle_reflow(unsigned long now) {
@@ -23,9 +41,10 @@ public:
 			callMessage("ERROR: No Profile in reflow mode!");
 			mode(ERROR_OFF);
 			return;
-		} else if (current_stage == current_profile->second.stages.end())
-			return;
-
+		} //else if (current_stage == current_profile->second.stages.end())
+			//line3 = "Finished";
+			//draw();
+			//return;
 		float direction = current_stage->target >= _start_temperature ? 1 : -1;
 		if (direction * (temperature() - current_stage->target) > 0 && _stage_start == 0) {
 			_stage_start = now;
@@ -33,6 +52,8 @@ public:
 				target(current_stage->target);
 			resetPID();
 			callMessage("INFO: Stage reached, waiting for %f seconds...", current_stage->stay);
+			line3 = current_stage->name;
+			draw();
 		} else if (_stage_start != 0 && now - _stage_start > current_stage->stay * 1000) {
 			stage(++current_stage);
 		}
@@ -147,12 +168,16 @@ public:
 			}
 			if (_onStage)
 				_onStage(stage->name.c_str(), (float)stage->target);
+				line3 = stage->name;
+				draw();
 			return ControllerBase::stage(stage->name);
 		} else {
 			mode(REFLOW_COOL);
 			target(20);
 			if (_onStage)
 				_onStage("DONE", target());
+				line3 = "DONE";
+				draw();
 			return ControllerBase::stage();
 		}
 	}

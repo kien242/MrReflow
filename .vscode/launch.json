@@ -12,9 +12,9 @@
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug",
-            "executable": "/home/empire/workspace/ESPReflow/.pio/build/reflow_MAX6675/firmware.elf",
+            "executable": "/home/kien242/Desktop/MrReflow/.pio/build/reflow_MAX6675/firmware.elf",
             "projectEnvName": "reflow_MAX6675",
-            "toolchainBinDir": "/home/empire/.platformio/packages/toolchain-xtensa32/bin",
+            "toolchainBinDir": "/home/kien242/.platformio/packages/toolchain-xtensa32/bin",
             "internalConsoleOptions": "openOnSessionStart",
             "preLaunchTask": {
                 "type": "PlatformIO",
@@ -25,18 +25,18 @@
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug (skip Pre-Debug)",
-            "executable": "/home/empire/workspace/ESPReflow/.pio/build/reflow_MAX6675/firmware.elf",
+            "executable": "/home/kien242/Desktop/MrReflow/.pio/build/reflow_MAX6675/firmware.elf",
             "projectEnvName": "reflow_MAX6675",
-            "toolchainBinDir": "/home/empire/.platformio/packages/toolchain-xtensa32/bin",
+            "toolchainBinDir": "/home/kien242/.platformio/packages/toolchain-xtensa32/bin",
             "internalConsoleOptions": "openOnSessionStart"
         },
         {
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug (without uploading)",
-            "executable": "/home/empire/workspace/ESPReflow/.pio/build/reflow_MAX6675/firmware.elf",
+            "executable": "/home/kien242/Desktop/MrReflow/.pio/build/reflow_MAX6675/firmware.elf",
             "projectEnvName": "reflow_MAX6675",
-            "toolchainBinDir": "/home/empire/.platformio/packages/toolchain-xtensa32/bin",
+            "toolchainBinDir": "/home/kien242/.platformio/packages/toolchain-xtensa32/bin",
             "internalConsoleOptions": "openOnSessionStart",
             "loadMode": "manual"
         }

@@ -32,13 +32,7 @@ ControllerBase::ControllerBase(Config &cfg, Adafruit_SSD1306 &display) : config(
 	pidTemperature.SetSampleTime(config.measureInterval * 1000);
 	pidTemperature.SetMode(AUTOMATIC);
 	pidTemperature.SetOutputLimits(0, 1);
-#ifdef TEMPERATURE_SENSOR_MAX31855
-	thermocouple.begin();
-#endif
-#ifdef PCA9536_SDA
-	Wire.begin(PCA9536_SDA, PCA9536_SCL);
-	pca9536.begin(Wire);
-#endif
+
 	_setPinMode(RELAY, OUTPUT);
 
 	_setPinValue(RELAY, LOW);
@@ -136,10 +130,7 @@ void ControllerBase::loop(unsigned long now)
 
 float ControllerBase::_read_temperature()
 {
-#ifdef TEMPERATURE_SENSOR_MAX31855
-	thermocouple.read();
-	return thermocouple.getTemperature();
-#elif defined TEMPERATURE_SENSOR_MAX6675
+#ifdef TEMPERATURE_SENSOR_MAX6675
 	float tmp = thermocouple.readCelsius();
 	line2 = String((int)round(tmp)) + char(0xf7);
 	return tmp;
@@ -148,20 +139,12 @@ float ControllerBase::_read_temperature()
 
 void ControllerBase::_setPinMode(int pin, int mode)
 {
-#ifdef PCA9536_SDA
-	pca9536.pinMode(pin, mode);
-#else
 	pinMode(pin, mode);
-#endif
 }
 
 void ControllerBase::_setPinValue(int pin, int value)
 {
-#ifdef PCA9536_SDA
-	pca9536.write(pin, value);
-#else
 	digitalWrite(pin, value);
-#endif
 }
 
 PID &ControllerBase::setPID(float P, float I, float D)

@@ -20,7 +20,6 @@
 
 #include <PID_v10.h>
 #include <SPI.h>
-#include <SparkFun_PCA9536_Arduino_Library.h>
 #include "Config.h"
 #include <PID_AutoTune_v0.h> // https://github.com/t0mpr1c3/Arduino-PID-AutoTune-Library
 #include <Adafruit_GFX.h>
@@ -43,9 +42,7 @@
 #define DEFAULT_CAL_ITERATIONS 3
 #define WATCHDOG_TIMEOUT 30000
 
-#ifdef TEMPERATURE_SENSOR_MAX31855
-#include <MAX31855.h>
-#elif defined TEMPERATURE_SENSOR_MAX6675
+#ifdef TEMPERATURE_SENSOR_MAX6675
 #include <max6675.h>
 #else
 #error No sensor type defined. Please define one in platformio.ini
@@ -218,9 +215,7 @@ public:
 	unsigned long elapsed(unsigned long now);
 
 private:
-#ifdef TEMPERATURE_SENSOR_MAX31855
-	MAX31855 thermocouple;
-#elif defined TEMPERATURE_SENSOR_MAX6675
+#ifdef TEMPERATURE_SENSOR_MAX6675
 	MAX6675 thermocouple;
 #endif
 	bool _locked;

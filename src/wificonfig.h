@@ -17,13 +17,13 @@
 
 /**
     Default configuration of the Weather Station
-		Copy this file to wificonfig.h and edit appropriately.
+    Copy this file to wificonfig.h and edit appropriately.
  */
- #ifndef MY_WIFICONFIG_H
- #define MY_WIFICONFIG_H
+#ifndef MY_WIFICONFIG_H
+#define MY_WIFICONFIG_H
 
 // Setup Wifi networks
-#define WIFI_SSID        "ssid"
-#define WIFI_PASSWORD    "passwd"
+#define WIFI_SSID "Xiaomi_1009"
+#define WIFI_PASSWORD "trankien1998"
 
 #endif

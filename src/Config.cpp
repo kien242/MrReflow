@@ -17,43 +17,44 @@
 
 #include "Config.h"
 
-Config::Stage::Stage(const char * n, const char * p, float t, float r, float s) :
- name(n), pid(p), target(t), rate(r), stay(s) {
-}
-
-Config::Profile::Profile(JsonObject& json)
+Config::Stage::Stage(const char *n, const char *p, float t, float r, float s) : name(n), pid(p), target(t), rate(r), stay(s)
 {
-	char str[255] = "";
-	stages.reserve(5);
-
-	name = json["name"].as<char*>();
-	JsonArray& jo = json["stages"];
-	JsonArray::iterator I = jo.begin();
-	while (I != jo.end())
-	{
-		const char * stage_name = I->as<char*>();
-		JsonObject &stage = json[stage_name];
-		Stage s(
-			stage_name,
-			stage["pid"].as<char*>(),
-			stage["target"],
-			stage["rate"],
-			stage["stay"]
-		);
-		stages.push_back(s);
-		sprintf(str, "Profile stage: %s, t=%f, r=%f, s=%f", s.name.c_str(), s.target, s.rate, s.stay);
-		Serial.println(str);
-		++I;
-	}
 }
 
-Config::Config(const String& cfg, const String& profiles) :
-	cfgName(cfg),
-	profilesName(profiles) {
+Config::Profile::Profile(JsonObject &json)
+{
+  char str[255] = "";
+  stages.reserve(5);
+
+  name = json["name"].as<char *>();
+  JsonArray &jo = json["stages"];
+  JsonArray::iterator I = jo.begin();
+  while (I != jo.end())
+  {
+    const char *stage_name = I->as<char *>();
+    JsonObject &stage = json[stage_name];
+    Stage s(
+        stage_name,
+        stage["pid"].as<char *>(),
+        stage["target"],
+        stage["rate"],
+        stage["stay"]);
+    stages.push_back(s);
+    sprintf(str, "Profile stage: %s, t=%f, r=%f, s=%f", s.name.c_str(), s.target, s.rate, s.stay);
+    Serial.println(str);
+    ++I;
+  }
 }
 
-bool Config::load_config() {
-	return load_json(cfgName, 1024, [](JsonObject& json, Config* self){
+Config::Config(const String &cfg, const String &profiles) : cfgName(cfg),
+                                                            profilesName(profiles)
+{
+}
+
+bool Config::load_config()
+{
+  return load_json(cfgName, 1024, [](JsonObject &json, Config *self)
+                   {
 		char str[255] = "";
 		self->networks.empty();
 		self->hostname = json["hostname"].as<char*>();
@@ -82,12 +83,13 @@ bool Config::load_config() {
 			Serial.println(str);
 			++I;
 		}
-		return true;
-	});
+		return true; });
 }
 
-bool Config::load_profiles() {
-	return load_json(profilesName, 10240, [](JsonObject& json, Config* self){
+bool Config::load_profiles()
+{
+  return load_json(profilesName, 10240, [](JsonObject &json, Config *self)
+                   {
 		char str[255] = "";
 		self->pid.clear();
 		JsonObject::iterator I;
@@ -123,78 +125,85 @@ bool Config::load_profiles() {
 		self->tuner_noise_band = json["tuner"]["noise_band"];
 		self->tuner_output_step = json["tuner"]["output_step"];
 
-		return true;
-	});
+		return true; });
 }
 
-bool Config::load_json(const String& name, size_t max_size, THandlerFunction_parse parser) {
-	Serial.println("Loading config " + name + "; Heap: " + String(ESP.getFreeHeap()));
-	File configFile = SPIFFS.open(name, "r");
-	if (!configFile) {
-		Serial.println("Could not open config file");
-		return false;
-	}
-
-	size_t size = configFile.size();
-	if (size > max_size) {
-		configFile.close();
-		Serial.println("config file size is too large: " + String(size));
-		return false;
-	}
-
-	DynamicJsonBuffer jsonBuffer;
-	JsonObject &json = jsonBuffer.parseObject(configFile);
-	configFile.close();
-
-	if (!json.success()) {
-		Serial.println("Failed parsing config file");
-		return false;
-	}
-
-	bool parsed = false;
-	if (parser)
-	 	parsed = parser(json, this);
-
-	Serial.println("Loading config " + name + " DONE; Heap: " + String(ESP.getFreeHeap()));
-	return parsed;
-}
-
-bool Config::save_config(AsyncWebServerRequest *request, uint8_t * data, size_t len, size_t index, size_t total) {
-	return save_file(request, cfgName, data, len, index, total);
-}
-bool Config::save_profiles(AsyncWebServerRequest *request, uint8_t * data, size_t len, size_t index, size_t total) {
-	return save_file(request, profilesName, data, len, index, total);
-}
-
-bool Config::save_file(AsyncWebServerRequest *request, const String& fname, uint8_t * data, size_t len, size_t index, size_t total)
+bool Config::load_json(const String &name, size_t max_size, THandlerFunction_parse parser)
 {
-	Serial.println("Saving config " + fname +" len/index: " + String(len) + "/" +  String(index));
+  Serial.println("Loading config " + name + "; Heap: " + String(ESP.getFreeHeap()));
+  File configFile = SPIFFS.open(name, "r");
+  if (!configFile)
+  {
+    Serial.println("Could not open config file");
+    return false;
+  }
 
-	File f = SPIFFS.open(fname, index != 0 ? "a" : "w");
-  if (!f) {
-		request->send(404, "application/json", "{\"msg\": \"ERROR: couldn't " + fname + " file for writing!\"}");
-		return false;
-	}
+  size_t size = configFile.size();
+  if (size > max_size)
+  {
+    configFile.close();
+    Serial.println("config file size is too large: " + String(size));
+    return false;
+  }
 
-	// TODO sanity checks
+  DynamicJsonBuffer jsonBuffer;
+  JsonObject &json = jsonBuffer.parseObject(configFile);
+  configFile.close();
 
-	f.write(data, len);
+  if (!json.success())
+  {
+    Serial.println("Failed parsing config file");
+    return false;
+  }
 
-	if (f.size() >= total)
-	{
-		request->send(200, "application/json", "{\"msg\": \"INFO: " + fname + " saved!\"}");
-		Serial.println("Saving config... DONE");
-	}
+  bool parsed = false;
+  if (parser)
+    parsed = parser(json, this);
 
-	f.close();
-	return true;
+  Serial.println("Loading config " + name + " DONE; Heap: " + String(ESP.getFreeHeap()));
+  return parsed;
 }
 
-void S_printf(const char * format, ...) {
-	char buffer[512];
-	va_list args;
-	va_start (args, format);
-	vsnprintf (buffer, sizeof(buffer), format, args);
-	Serial.println(buffer);
-	va_end (args);
+bool Config::save_config(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
+{
+  return save_file(request, cfgName, data, len, index, total);
+}
+bool Config::save_profiles(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
+{
+  return save_file(request, profilesName, data, len, index, total);
+}
+
+bool Config::save_file(AsyncWebServerRequest *request, const String &fname, uint8_t *data, size_t len, size_t index, size_t total)
+{
+  Serial.println("Saving config " + fname + " len/index: " + String(len) + "/" + String(index));
+
+  File f = SPIFFS.open(fname, index != 0 ? "a" : "w");
+  if (!f)
+  {
+    request->send(404, "application/json", "{\"msg\": \"ERROR: couldn't " + fname + " file for writing!\"}");
+    return false;
+  }
+
+  // TODO sanity checks
+
+  f.write(data, len);
+
+  if (f.size() >= total)
+  {
+    request->send(200, "application/json", "{\"msg\": \"INFO: " + fname + " saved!\"}");
+    Serial.println("Saving config... DONE");
+  }
+
+  f.close();
+  return true;
+}
+
+void S_printf(const char *format, ...)
+{
+  char buffer[512];
+  va_list args;
+  va_start(args, format);
+  vsnprintf(buffer, sizeof(buffer), format, args);
+  Serial.println(buffer);
+  va_end(args);
 }

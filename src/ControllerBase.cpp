@@ -18,9 +18,9 @@
 #include "ControllerBase.h"
 
 ControllerBase::ControllerBase(Config &cfg, Adafruit_SSD1306 &display) : config(cfg),
-																									pidTemperature(&_temperature, &_target_control, &_target, .5 / DEFAULT_TEMP_RISE_AFTER_OFF, 5.0 / DEFAULT_TEMP_RISE_AFTER_OFF, 4 / DEFAULT_TEMP_RISE_AFTER_OFF, DIRECT),
-																									aTune(&_temperature, &_target_control, &_target, &_now, DIRECT),
-																									thermocouple(thermoCLK, thermoCS, thermoDO)
+															pidTemperature(&_temperature, &_target_control, &_target, .5 / DEFAULT_TEMP_RISE_AFTER_OFF, 5.0 / DEFAULT_TEMP_RISE_AFTER_OFF, 4 / DEFAULT_TEMP_RISE_AFTER_OFF, DIRECT),
+															aTune(&_temperature, &_target_control, &_target, &_now, DIRECT),
+															thermocouple(thermoCLK, thermoCS, thermoDO)
 {
 	this->display = display;
 	_readings.reserve(15 * 60);
@@ -118,7 +118,7 @@ void ControllerBase::loop(unsigned long now)
 	handle_mode(now);
 
 	handle_safety(now);
-	
+
 	_setPinValue(RELAY, _heater);
 
 	if (_onHeater && _heater != _last_heater)

@@ -26,7 +26,7 @@
 #include <esp_task_wdt.h>
 
 #define OLED_RESET 4        // Reset pin # (or -1 if sharing Arduino reset pin)
-#define SCREEN_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
+#define SCREEN_ADDRESS 0x3D ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
 
 AsyncWebServer server(80);
 AsyncWebSocket ws("/ws");
@@ -172,6 +172,8 @@ void setup()
 {
   Serial.begin(115200);
   Wire.begin(I2C_SCL, I2C_SDA, 100000);
+  pinMode(18, OUTPUT);
+  pinMode(23, OUTPUT);
   SPIFFS.begin();
 
   if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS))
@@ -337,6 +339,8 @@ void setup()
 int count = 0;
 void loop()
 {
+  digitalWrite(23, HIGH);
+  digitalWrite(18,LOW);
   esp_task_wdt_reset();
   unsigned long now = millis();
   controller->loop(now);

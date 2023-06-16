@@ -17,6 +17,7 @@
 
 #include "ControllerBase.h"
 
+
 ControllerBase::ControllerBase(Config &cfg, Adafruit_SSD1306 &display) : config(cfg),
 															pidTemperature(&_temperature, &_target_control, &_target, .5 / DEFAULT_TEMP_RISE_AFTER_OFF, 5.0 / DEFAULT_TEMP_RISE_AFTER_OFF, 4 / DEFAULT_TEMP_RISE_AFTER_OFF, DIRECT),
 															aTune(&_temperature, &_target_control, &_target, &_now, DIRECT),
@@ -130,11 +131,9 @@ void ControllerBase::loop(unsigned long now)
 
 float ControllerBase::_read_temperature()
 {
-#ifdef TEMPERATURE_SENSOR_MAX6675
 	float tmp = thermocouple.readCelsius();
 	line2 = String((int)round(tmp)) + char(0xf7);
 	return tmp;
-#endif
 }
 
 void ControllerBase::_setPinMode(int pin, int mode)

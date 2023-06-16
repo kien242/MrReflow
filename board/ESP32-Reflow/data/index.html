@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <title>SMD-Reflow Ofen</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/boost.js"></script>
+</head>
+
+<body>
+  <div class="topnav">
+    <h1>SMD-Reflow Ofen</h1>
+  </div>
+  <div class="content">
+    <div class="card-grid">
+      <div class="card">
+        <p class="card-title">Temperaturverlauf</p>
+        <div id="chart-temperature" class="chart-container"></div>
+      </div>
+    </div>
+
+    <div class="control-grid">
+      <div class="card">
+        <p class="card-title">Informationen</p>
+        <div class="control-container">
+          <div class="child-text">
+            <table id="properties">
+              <tr>
+                <th width="70%">Eigenschaft</th>
+                <th width="30%">Wert</th>
+              </tr>
+              <tr>
+                <td>Status</td>
+                <td id="status">--</td>
+              </tr>
+              <tr>
+                <td>Aktives Profil</td>
+                <td id="profile">--</td>
+              </tr>
+              <tr>
+                <td>Aktuelle Temperatur</td>
+                <td id="tempIst">--°C</td>
+              </tr>
+              <tr>
+                <td>Soll-Temperatur</td>
+                <td id="tempSoll">--°C</td>
+              </tr>
+              <tr>
+                <td>Reflow-Phase</td>
+                <td id="reflow-state">--</td>
+              </tr>
+            </table>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="card-title">Bedienung</p>
+        <div class="control-container">
+          <div class="child-text">
+
+            <div class="button-container">
+              <div class="button-item1">
+                <button class="button button1" onclick="sendRequest('start')">Starten</button>
+              </div>
+              <div class="button-item2">
+                <button class="button button2" onclick="sendRequest('stop')">Stoppen</button>
+              </div>
+            </div>
+
+            <div class="button-container">
+              <div class="button-double-item">
+                <button class="button button3" onclick="sendRequest('profile')">Profil wechseln</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+
+</html>

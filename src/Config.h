@@ -25,26 +25,12 @@
 #include <map>
 #include "wificonfig.h"
 
-#define thermoDO 12
-#define thermoCS 15
-#define thermoCLK 14
-
 #define RELAY 25
 
-#define I2C_SDA 15
-#define I2C_SCL 16
+#define I2C_SDA 21
+#define I2C_SCL 22
 
-#define DEFAULT_TARGET 60
-#define MAX_ON_TIME 1000 * 60 * 15
-#define MAX_TEMPERATURE 400
-#define MIN_TEMP_RISE_TIME 1000 * 120
-#define MIN_TEMP_RISE 10
-#define CONTROL_HYSTERISIS .01
-#define DEFAULT_TEMP_RISE_AFTER_OFF 30.0
-#define SAFE_TEMPERATURE 50
-#define CAL_HEATUP_TEMPERATURE 90
-#define DEFAULT_CAL_ITERATIONS 3
-#define WATCHDOG_TIMEOUT 30000
+
 
 class Config
 {

@@ -25,11 +25,25 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
-#ifdef TEMPERATURE_SENSOR_MAX6675
+
+#define thermoDO 12
+#define thermoCS 15
+#define thermoCLK 14
+
+#define DEFAULT_TARGET 60
+#define MAX_ON_TIME 1000 * 60 * 15
+#define MAX_TEMPERATURE 400
+#define MIN_TEMP_RISE_TIME 1000 * 120
+#define MIN_TEMP_RISE 10
+#define CONTROL_HYSTERISIS .01
+#define DEFAULT_TEMP_RISE_AFTER_OFF 30.0
+#define SAFE_TEMPERATURE 50
+#define CAL_HEATUP_TEMPERATURE 90
+#define DEFAULT_CAL_ITERATIONS 3
+#define WATCHDOG_TIMEOUT 30000
+
 #include <max6675.h>
-#else
-#error No sensor type defined. Please define one in platformio.ini
-#endif
+
 
 #define CB_GETTER(T, name) \
   virtual T name() { return _##name; }
@@ -198,9 +212,7 @@ public:
   unsigned long elapsed(unsigned long now);
 
 private:
-#ifdef TEMPERATURE_SENSOR_MAX6675
   MAX6675 thermocouple;
-#endif
   bool _locked;
   bool _heater;
   bool _last_heater;

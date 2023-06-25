@@ -1,0 +1,7 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "Espressif")(type "KiCad")(uri "${KIPRJMOD}/libraries/Espressif.kicad_sym")(options "")(descr ""))
+  (lib (name "yaaj_dcdc_stepdown_lm2596")(type "Legacy")(uri "${KIPRJMOD}/libraries/yaaj_dcdc_stepdown_lm2596.lib")(options "")(descr ""))
+  (lib (name "CP2102-GM")(type "KiCad")(uri "${KIPRJMOD}/libraries/CP2102-GM.kicad_sym")(options "")(descr ""))
+  (lib (name "ReflowESP-rescue")(type "KiCad")(uri "${KIPRJMOD}/ReflowESP-rescue.kicad_sym")(options "")(descr ""))
+)

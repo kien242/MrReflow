@@ -23,7 +23,7 @@
 #define MY_WIFICONFIG_H
 
 // Setup Wifi networks
-#define WIFI_SSID "Xiaomi_1009"
-#define WIFI_PASSWORD "trankien1998"
+#define WIFI_SSID "TP-Link_A769_2.4GHZ"
+#define WIFI_PASSWORD "163265920"
 
 #endif
